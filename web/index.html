@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Overview - codex-agent</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header></header>
+<main>
+  <h1>Overview</h1>
+  <p class="sub">Current state of every ticket. A ticket's folder is its state.</p>
+
+  <div class="counters" id="counters"></div>
+  <div class="rate-line" id="rate"></div>
+
+  <h2>Board</h2>
+  <div class="board" id="board"></div>
+
+  <p style="margin-top:16px">
+    <button class="primary" id="processAll">Process all inbox tickets</button>
+    <button id="refresh">Refresh</button>
+  </p>
+</main>
+
+<script src="app.js"></script>
+<script>
+const COLS = [
+  { key: 'new',              title: 'Inbox',     cls: ''      },
+  { key: 'grouped',          title: 'Grouped',   cls: ''      },
+  { key: 'needs',            title: 'Needs you', cls: 'needs' },
+  { key: 'awaiting-info',    title: 'Awaiting',  cls: 'await' },
+  { key: 'escalated',        title: 'Escalated', cls: 'esc'   },
+  { key: 'resolved',         title: 'Resolved',  cls: 'done'  }
+];
+
+function colOf(t) {
+  if (needsYou(t)) return 'needs';
+  return t.state;
+}
+
+function card(t, cls) {
+  const bits = [];
+  if (t.agent) bits.push('<span class="tag">' + t.agent + '</span>');
+  if (t.runbook) bits.push(t.runbook.split('-').slice(0, 2).join('-'));
+  if (hasWrite(t)) bits.push('<span class="tag write">WRITE</span>');
+  if (t.state === 'pending-grouping') bits.push('<span class="tag">group?</span>');
+  if (t.escalation_reason) bits.push(t.escalation_reason);
+  const c = t.confidence || {};
+  const score = c.action != null ? c.action : c.grouping;
+  if (score != null) bits.push('conf ' + score.toFixed(2));
+
+  return '<div class="card ' + cls + '" ' +
+      (cls === 'needs' ? 'onclick="location.href=\'review.html\'"' : '') + '>' +
+    '<div class="num">' + t.number + '</div>' +
+    '<div class="desc">' + t.short_description + '</div>' +
+    '<div class="meta">' + bits.join(' ') + '</div>' +
+  '</div>';
+}
+
+async function load() {
+  const b = await getJSON('board.json');
+  renderNav('overview', b.counts.needs_you);
+  stamp(b.generated_at);
+
+  const c = b.counts;
+  document.getElementById('counters').innerHTML = [
+    ['', c.unprocessed,    'Unprocessed'],
+    ['needs', c.needs_you, 'Needs you'],
+    ['info', c.awaiting_info, 'Awaiting info'],
+    ['esc',  c.escalated,  'Escalated'],
+    ['done', c.resolved_today, 'Resolved today']
+  ].map(([cls, n, l]) =>
+    '<div class="counter ' + cls + '"><div class="n">' + n + '</div>' +
+    '<div class="l">' + l + '</div></div>').join('');
+
+  const a = b.auto_handled;
+  document.getElementById('rate').innerHTML =
+    'Auto-handled today: <b>' + a.count + ' of ' + a.total + '</b> (' +
+    Math.round(a.rate * 100) + '%) &mdash; resolved with no human decision. ' +
+    '<span style="color:var(--muted)">Thresholds: grouping ' +
+    b.thresholds.grouping + ', action ' + b.thresholds.action + '.</span>';
+
+  document.getElementById('board').innerHTML = COLS.map(col => {
+    const items = b.tickets.filter(t => colOf(t) === col.key);
+    return '<div class="col"><h3>' + col.title + '<span>' + items.length +
+      '</span></h3>' + items.map(t => card(t, col.cls)).join('') + '</div>';
+  }).join('');
+}
+
+document.getElementById('refresh').onclick = load;
+document.getElementById('processAll').onclick = async () => {
+  const r = await runInCodex('all', 'process');
+  if (r) load();
+};
+load().catch(e => document.querySelector('main').innerHTML =
+  '<div class="empty">' + e.message + '</div>');
+</script>
+</body>
+</html>

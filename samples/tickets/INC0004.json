@@ -1,0 +1,12 @@
+{
+  "number": "INC0004",
+  "created_at": "2026-09-29T09:03:00+09:00",
+  "caller": "y.muto",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Cost spike in the dev subscription",
+  "description": "Our September spend is roughly double August with no obvious change.",
+  "state": "new",
+  "agent": null,
+  "history": []
+}

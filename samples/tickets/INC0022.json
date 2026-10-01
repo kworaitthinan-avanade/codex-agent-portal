@@ -1,0 +1,12 @@
+{
+  "number": "INC0022",
+  "created_at": "2026-09-29T12:21:00+09:00",
+  "caller": "y.hitachi",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Progress summary for the migration workstream",
+  "description": "Need a status roll-up for the steering meeting.",
+  "state": "new",
+  "agent": null,
+  "history": []
+}

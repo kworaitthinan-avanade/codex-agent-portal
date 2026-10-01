@@ -1,0 +1,12 @@
+{
+  "number": "INC0008",
+  "created_at": "2026-09-29T09:47:00+09:00",
+  "caller": "e.shimada",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Monthly operations report for September",
+  "description": "Please prepare the monthly KPI summary for the September period.",
+  "state": "new",
+  "agent": null,
+  "history": []
+}

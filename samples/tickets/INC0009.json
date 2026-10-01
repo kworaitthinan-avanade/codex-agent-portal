@@ -1,0 +1,12 @@
+{
+  "number": "INC0009",
+  "created_at": "2026-09-29T09:58:00+09:00",
+  "caller": "ops-alerts",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Low disk space warning on log volume",
+  "description": "The log volume is at 91 percent and climbing.",
+  "state": "new",
+  "agent": null,
+  "history": []
+}

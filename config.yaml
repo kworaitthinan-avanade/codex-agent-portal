@@ -1,0 +1,17 @@
+# codex-agent configuration - the only config file in this project.
+
+thresholds:
+  grouping: 0.85          # >= AI assigns and continues automatically
+  action:   0.90          # >= AND all tools read-only, AI executes
+
+always_ask_on_write: true # a write:true tool asks every time, any confidence
+
+agents:
+  - service-desk
+  - request-access
+  - ops-automation
+  - service-management
+  - finops
+
+bridge_url: http://localhost:8765
+refresh_seconds: 10

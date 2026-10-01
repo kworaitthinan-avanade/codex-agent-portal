@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review Queue - codex-agent</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header></header>
+<main>
+  <h1>Review Queue</h1>
+  <p class="sub" id="sub"></p>
+
+  <h2 id="h-group">Confirm group</h2>
+  <div id="grouping"></div>
+
+  <h2 id="h-action">Approve action</h2>
+  <div id="action"></div>
+</main>
+
+<script src="app.js"></script>
+<script>
+let THR = { grouping: 0.85, action: 0.90 };
+const AGENTS = ['service-desk','request-access','ops-automation','service-management','finops'];
+
+/* ---------- Gate 1 : grouping ---------- */
+function groupingCard(t) {
+  const alts = {};
+  (t.alternatives || []).forEach(a => alts[a.agent] = a.score);
+  const top = (t.alternatives || [])[0];
+  const suggested = t.agent || (top ? null : null);
+
+  // highest scoring candidate is the AI suggestion
+  const best = (t.alternatives || []).reduce((m, a) => a.score > (m ? m.score : -1) ? a : m, null);
+  const pick = t.agent || 'finops';
+
+  const buttons = AGENTS.map(a => {
+    const s = a === pick ? t.confidence.grouping : (alts[a] != null ? alts[a] : 0);
+    const isTop = a === pick;
+    return '<button class="' + (isTop ? 'primary' : '') + '" ' +
+      'onclick="confirmGroup(\'' + t.number + '\',\'' + a + '\')">' +
+      a + ' ' + s.toFixed(2) + '</button>';
+  }).join('');
+
+  return '<div class="item">' +
+    '<div class="item-head"><span class="num">' + t.number + '</span>' +
+      '<span class="desc">' + t.short_description + '</span>' +
+      '<span class="tag">GROUPING</span></div>' +
+    '<div class="why">' + t.description + '</div>' +
+    confBar(t.confidence.grouping, THR.grouping) +
+    '<div class="choices">' + buttons +
+      '<button class="danger" onclick="confirmGroup(\'' + t.number + '\',\'escalate\')">' +
+      'Escalate &mdash; none of these</button>' +
+    '</div>' +
+    '<p class="hint">One click. The agent runs automatically after you choose.</p>' +
+  '</div>';
+}
+
+/* ---------- Gate 2 : action ---------- */
+function planBlock(t) {
+  const steps = (t.plan || []).map((s, i) =>
+    '<div class="step"><span class="i">' + (i + 1) + '.</span><div>' +
+      '<code>' + s.tool + '</code> ' +
+      (s.write ? '<span class="tag write">WRITE</span>' : '<span class="tag read">read</span>') +
+      '<div style="font-size:11px;color:var(--muted);margin-top:2px">' +
+        JSON.stringify(s.args || {}) + '</div>' +
+      (s.write ? '<span class="rb">rollback: ' + s.rollback + '</span>' : '') +
+    '</div></div>').join('');
+
+  return '<div class="plan-wrap" id="plan-' + t.number + '" ' +
+    'onscroll="unlock(\'' + t.number + '\')">' + steps +
+    (t.evidence ? '<p class="hint">evidence: ' + t.evidence + '</p>' : '') +
+  '</div>';
+}
+
+function actionCard(t) {
+  const why = t.approval_reason === 'write-tool'
+    ? 'Held because the plan contains a write operation. Write always asks, at any confidence.'
+    : 'Held because action confidence is below the threshold.';
+
+  const alts = (t.plan_alternatives || []).map(a =>
+    '<button onclick="decide(\'' + t.number + '\',\'alternative\',\'' +
+      a.replace(/'/g, "") + '\')">' + a + '</button>').join('');
+
+  return '<div class="item">' +
+    '<div class="item-head"><span class="num">' + t.number + '</span>' +
+      '<span class="desc">' + t.short_description + '</span>' +
+      '<span class="tag">ACTION</span></div>' +
+    '<div class="why">' + t.agent + ' &middot; ' + (t.runbook || 'no runbook') +
+      ' &middot; ' + (t.plan || []).length + ' steps, ' +
+      (t.plan || []).filter(s => s.write).length + ' write &mdash; ' + why + '</div>' +
+    confBar(t.confidence.action, THR.action) +
+
+    '<div class="sect">Recommended</div>' +
+    planBlock(t) +
+    '<button class="primary" id="ok-' + t.number + '" disabled ' +
+      'onclick="decide(\'' + t.number + '\',\'approve\')">Approve &amp; run recommended</button>' +
+    '<span class="hint" id="lock-' + t.number + '"> scroll the plan to enable</span>' +
+
+    (alts ? '<div class="sect">Alternative</div><div class="choices">' + alts + '</div>' : '') +
+
+    '<div class="sect adv">Advisory &mdash; executes nothing</div>' +
+    '<div class="choices">' +
+      '<button class="ghost" onclick="decide(\'' + t.number + '\',\'advisory\',\'ask requester to confirm the target\')">Ask requester</button>' +
+      '<button class="ghost" onclick="decide(\'' + t.number + '\',\'advisory\',\'request missing information\')">Request missing info</button>' +
+      '<button class="danger" onclick="decide(\'' + t.number + '\',\'escalate\')">Escalate to L2</button>' +
+      '<button class="danger" onclick="decide(\'' + t.number + '\',\'reject\')">Reject</button>' +
+    '</div>' +
+  '</div>';
+}
+
+/* REQ-033: Approve is disabled until the plan has actually been looked at.
+   Without this the button becomes reflexive and the gate is theatre. */
+function unlock(num) {
+  const box = document.getElementById('plan-' + num);
+  if (box.scrollTop + box.clientHeight >= box.scrollHeight - 8) {
+    document.getElementById('ok-' + num).disabled = false;
+    document.getElementById('lock-' + num).textContent = '';
+    box.classList.add('scrolled');
+  }
+}
+
+async function confirmGroup(num, agent) {
+  const r = await runInCodex(num, agent === 'escalate' ? 'escalate' : 'group', agent);
+  if (r) load();
+}
+async function decide(num, action, extra) {
+  const r = await runInCodex(num, action, extra);
+  if (r) load();
+}
+
+async function load() {
+  const b = await getJSON('board.json');
+  THR = b.thresholds || THR;
+  renderNav('review', b.counts.needs_you);
+  stamp(b.generated_at);
+
+  const g = b.tickets.filter(t => t.state === 'pending-grouping');
+  const a = b.tickets.filter(t => t.state === 'pending-action');
+
+  document.getElementById('sub').textContent =
+    (g.length + a.length) + ' items need your confirmation.';
+  document.getElementById('h-group').textContent  = 'Confirm group (' + g.length + ')';
+  document.getElementById('h-action').textContent = 'Approve action (' + a.length + ')';
+
+  document.getElementById('grouping').innerHTML = g.length
+    ? g.map(groupingCard).join('')
+    : '<div class="empty">Nothing to confirm.</div>';
+  document.getElementById('action').innerHTML = a.length
+    ? a.map(actionCard).join('')
+    : '<div class="empty">No plans waiting for approval.</div>';
+
+  // a plan short enough not to scroll must still be enabled
+  a.forEach(t => {
+    const box = document.getElementById('plan-' + t.number);
+    if (box && box.scrollHeight <= box.clientHeight + 8) unlock(t.number);
+  });
+}
+
+load().catch(e => document.querySelector('main').innerHTML =
+  '<div class="empty">' + e.message + '</div>');
+</script>
+</body>
+</html>

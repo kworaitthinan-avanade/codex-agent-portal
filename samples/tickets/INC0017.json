@@ -1,0 +1,12 @@
+{
+  "number": "INC0017",
+  "created_at": "2026-09-29T11:26:00+09:00",
+  "caller": "r.harada",
+  "channel": "portal",
+  "language": "ja",
+  "short_description": "パスワードの有効期限が切れました",
+  "description": "ログイン時に期限切れと表示され、変更できません。",
+  "state": "new",
+  "agent": null,
+  "history": []
+}

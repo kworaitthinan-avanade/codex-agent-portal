@@ -1,0 +1,12 @@
+{
+  "number": "INC0021",
+  "created_at": "2026-09-29T12:10:00+09:00",
+  "caller": "m.tanaka",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Cannot open the shared drive",
+  "description": "The mapped drive shows as disconnected this morning.",
+  "state": "new",
+  "agent": null,
+  "history": []
+}

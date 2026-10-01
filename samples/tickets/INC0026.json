@@ -1,0 +1,12 @@
+{
+  "number": "INC0026",
+  "created_at": "2026-09-29T13:05:00+09:00",
+  "caller": "ops-alerts",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Backup job failed three nights running",
+  "description": "The nightly backup has failed for three consecutive nights.",
+  "state": "new",
+  "agent": null,
+  "history": []
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Insights - codex-agent</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header></header>
+<main>
+  <h1>Insights</h1>
+  <p class="sub">How well the pipeline is working, and where the bottleneck actually is.</p>
+
+  <div class="ranges">
+    <button class="on">Today</button>
+    <button>7 days</button>
+    <button>30 days</button>
+  </div>
+
+  <div id="out"></div>
+</main>
+
+<script src="app.js"></script>
+<script>
+function metric(label, pct, value, cls) {
+  return '<div class="metric">' +
+    '<div class="lab">' + label + '</div>' +
+    '<div class="track ' + (cls || '') + '"><i style="width:' + pct + '%"></i></div>' +
+    '<div class="val">' + value + '</div>' +
+  '</div>';
+}
+
+async function load() {
+  const [s, b] = await Promise.all([getJSON('stats.json'), getJSON('board.json')]);
+  renderNav('insights', b.counts.needs_you);
+  stamp(s.generated_at);
+
+  const r = s.rates;
+  const rates =
+    '<div class="panel"><h2 style="margin-top:0">Automation rate</h2>' +
+    metric('grouping auto', r.grouping_auto.rate * 100,
+      Math.round(r.grouping_auto.rate * 100) + '%  ' + r.grouping_auto.count + ' / ' + r.grouping_auto.total) +
+    metric('action auto', r.action_auto.rate * 100,
+      Math.round(r.action_auto.rate * 100) + '%  ' + r.action_auto.count + ' / ' + r.action_auto.total, 'amber') +
+    metric('escalated', r.escalated.rate * 100,
+      Math.round(r.escalated.rate * 100) + '%  ' + r.escalated.count + ' / ' + r.escalated.total, 'red') +
+    '<p class="note">The two auto rates are reported separately because they tune two ' +
+    'independent thresholds. Raise automation only where the measured rate supports it.</p></div>';
+
+  const t = s.time_seconds;
+  const max = Math.max(t.ai_median, t.human_wait_median);
+  const time =
+    '<div class="panel"><h2 style="margin-top:0">Processing time (median)</h2>' +
+    metric('AI time', t.ai_median / max * 100, fmtDuration(t.ai_median)) +
+    metric('human wait', t.human_wait_median / max * 100, fmtDuration(t.human_wait_median), 'amber') +
+    '<p class="note">Reported separately, never summed. Blended, the human queue delay ' +
+    'swamps the AI time and the metric stops meaning anything. Split, it shows the ' +
+    'bottleneck is the approval queue &mdash; which is the honest finding a ' +
+    'human-in-the-loop system should surface, not hide.</p></div>';
+
+  const tk = s.tokens;
+  const maxTok = Math.max(...Object.values(tk.by_agent));
+  const tokens =
+    '<div class="panel"><h2 style="margin-top:0">Tokens</h2>' +
+    '<div class="big">' +
+      '<div><span>total today</span><b>' + tk.total.toLocaleString() + '</b></div>' +
+      '<div><span>per ticket avg</span><b>' + tk.per_ticket_avg.toLocaleString() + '</b></div>' +
+    '</div>' +
+    Object.entries(tk.by_agent).sort((a, c) => c[1] - a[1]).map(([a, v]) =>
+      metric(a, v / maxTok * 100, v.toLocaleString(), 'blue')).join('') +
+    '<p class="note">Attributed to the agent that spent them, aggregated from each ' +
+    'run&rsquo;s trace log. Operating cost per ticket is part of the governance story.</p></div>';
+
+  const days = s.resolved_by_day;
+  const maxDay = Math.max(...days.map(d => d.count));
+  const byDay =
+    '<div class="panel"><h2 style="margin-top:0">Resolved by day</h2>' +
+    days.map(d => metric(d.day, d.count / maxDay * 100, d.count)).join('') + '</div>';
+
+  document.getElementById('out').innerHTML = rates + time + tokens + byDay;
+}
+
+document.querySelectorAll('.ranges button').forEach(btn => btn.onclick = () => {
+  document.querySelectorAll('.ranges button').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+});
+
+load().catch(e => document.getElementById('out').innerHTML =
+  '<div class="empty">' + e.message + '</div>');
+</script>
+</body>
+</html>

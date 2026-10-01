@@ -1,0 +1,12 @@
+{
+  "number": "INC0010",
+  "created_at": "2026-09-29T10:09:00+09:00",
+  "caller": "r.kochi",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Review idle EC2 instances",
+  "description": "Several instances look stopped or barely used. Can we review them.",
+  "state": "new",
+  "agent": null,
+  "history": []
+}

@@ -1,0 +1,12 @@
+{
+  "number": "INC0015",
+  "created_at": "2026-09-29T11:04:00+09:00",
+  "caller": "s.makishima",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "FAQ entry for the repeated VPN question",
+  "description": "We keep getting the same VPN question. Can we publish an FAQ.",
+  "state": "new",
+  "agent": null,
+  "history": []
+}
