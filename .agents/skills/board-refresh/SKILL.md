@@ -33,7 +33,6 @@ description: Scans data/ and regenerates web/board.json and web/stats.json for t
    mid-refresh page load never sees half a board.
 8. Run this after every state change. The UI has no other data source.
 
-
 ## Universal rules
 
 1. Move ticket files, never copy. One ticket exists in exactly one folder (REQ-020).
