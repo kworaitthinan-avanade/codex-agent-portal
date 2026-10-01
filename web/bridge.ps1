@@ -64,9 +64,15 @@ while ($listener.IsListening) {
     }
 
     if ($prompt) {
-        Write-Host "[$action] $ticket"
+        Write-Host "[$action] $ticket - running codex exec, output below:"
         Push-Location $repo
-        $out = & codex exec --sandbox workspace-write $prompt 2>&1 | Out-String
+        # Stream each line live instead of buffering until exit, so you can see it's working.
+        $lines = & codex exec --sandbox workspace-write $prompt 2>&1 | ForEach-Object {
+            Write-Host "  $_"
+            $_
+        }
+        $out = $lines | Out-String
+        Write-Host "[$action] $ticket - done."
         Pop-Location
         $payload = @{ ok = $true; action = $action; ticket = $ticket; output = $out }
     } else {

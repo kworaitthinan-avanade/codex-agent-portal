@@ -6,7 +6,7 @@
   "language": "en",
   "short_description": "Unexpected charge on a shared subscription",
   "description": "There is a new line item we do not recognise on the invoice.",
-  "state": "escalated",
+  "state": "pending-grouping",
   "agent": "service-management",
   "confidence": {
     "grouping": 0.68,
@@ -67,6 +67,12 @@
       "at": "2026-10-01T00:00:00+09:00",
       "actor": "ai",
       "note": "Escalated: no matching service-management runbook"
+    },
+    {
+      "stage": "grouping-confirmation",
+      "at": "2026-10-01T00:00:00+09:00",
+      "actor": "human",
+      "note": "Manually returned to pending-grouping for re-confirmation"
     }
   ]
 }
