@@ -1,0 +1,83 @@
+{
+  "number": "INC0018",
+  "created_at": "2026-09-29T11:37:00+09:00",
+  "caller": "t.dong",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Access to the production log bucket",
+  "description": "I need to read production logs for an incident investigation.",
+  "state": "resolved",
+  "agent": "request-access",
+  "confidence": {
+    "grouping": 0.91,
+    "action": 0.94
+  },
+  "alternatives": [
+    {
+      "agent": "service-desk",
+      "score": 0.05
+    },
+    {
+      "agent": "ops-automation",
+      "score": 0.04
+    }
+  ],
+  "runbook": "RB-014-s3-access.md",
+  "plan": [
+    {
+      "tool": "aws_s3_get_bucket_policy",
+      "write": false,
+      "args": {
+        "bucket": "wora-test-s3"
+      }
+    },
+    {
+      "tool": "aws_iam_list_attached",
+      "write": false,
+      "args": {
+        "role": "honda-dev-readonly"
+      }
+    }
+  ],
+  "plan_alternatives": [],
+  "evidence": "Bucket policy lacks s3:ListBucket for the caller's role.",
+  "approval": {
+    "required": false,
+    "reason": null,
+    "by": null,
+    "at": null
+  },
+  "metrics": {
+    "ai_seconds": 31,
+    "human_wait_seconds": null,
+    "tokens": 6011
+  },
+  "run_id": "20260929-1137-INC0018",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T11:38:00+09:00",
+      "actor": "ai",
+      "note": "routed to request-access (0.91)"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-09-29T11:39:00+09:00",
+      "actor": "ai",
+      "note": "RB-014-s3-access.md matched; 2 read-only steps; confidence 0.94"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-09-29T11:40:00+09:00",
+      "actor": "ai",
+      "note": "auto-executed above threshold; no human decision required"
+    },
+    {
+      "stage": "close",
+      "at": "2026-09-29T11:41:00+09:00",
+      "actor": "ai",
+      "note": "resolved"
+    }
+  ],
+  "resolved_at": "2026-09-29T11:41:00+09:00"
+}

@@ -1,0 +1,84 @@
+{
+  "number": "INC0024",
+  "created_at": "2026-09-29T12:43:00+09:00",
+  "caller": "r.kochi",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Rightsizing recommendation for the dev cluster",
+  "description": "The dev cluster looks oversized for current load.",
+  "state": "resolved",
+  "agent": "finops",
+  "confidence": {
+    "grouping": 0.91,
+    "action": 0.94
+  },
+  "alternatives": [
+    {
+      "agent": "service-desk",
+      "score": 0.05
+    },
+    {
+      "agent": "request-access",
+      "score": 0.04
+    }
+  ],
+  "runbook": "RB-022-idle-resources.md",
+  "plan": [
+    {
+      "tool": "resource_inventory",
+      "write": false,
+      "args": {
+        "lookback_days": 30
+      }
+    },
+    {
+      "tool": "cost_explorer_query",
+      "write": false,
+      "args": {
+        "granularity": "DAILY",
+        "period": "2026-09"
+      }
+    }
+  ],
+  "plan_alternatives": [],
+  "evidence": "Six resources show under 5 percent utilisation over 30 days.",
+  "approval": {
+    "required": false,
+    "reason": null,
+    "by": null,
+    "at": null
+  },
+  "metrics": {
+    "ai_seconds": 39,
+    "human_wait_seconds": null,
+    "tokens": 5044
+  },
+  "run_id": "20260929-1243-INC0024",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T12:44:00+09:00",
+      "actor": "ai",
+      "note": "routed to finops (0.91)"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-09-29T12:45:00+09:00",
+      "actor": "ai",
+      "note": "RB-022-idle-resources.md matched; 2 read-only steps; confidence 0.94"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-09-29T12:46:00+09:00",
+      "actor": "ai",
+      "note": "auto-executed above threshold; no human decision required"
+    },
+    {
+      "stage": "close",
+      "at": "2026-09-29T12:47:00+09:00",
+      "actor": "ai",
+      "note": "resolved"
+    }
+  ],
+  "resolved_at": "2026-09-29T12:47:00+09:00"
+}

@@ -1,0 +1,83 @@
+{
+  "number": "INC0011",
+  "created_at": "2026-09-29T10:20:00+09:00",
+  "caller": "a.yusuke",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Printer not responding on floor 8",
+  "description": "Print jobs queue but nothing comes out.",
+  "state": "resolved",
+  "agent": "service-desk",
+  "confidence": {
+    "grouping": 0.86,
+    "action": 0.91
+  },
+  "alternatives": [
+    {
+      "agent": "request-access",
+      "score": 0.08
+    },
+    {
+      "agent": "ops-automation",
+      "score": 0.06
+    }
+  ],
+  "runbook": "RB-002-vpn-connection.md",
+  "plan": [
+    {
+      "tool": "kb_search",
+      "write": false,
+      "args": {
+        "q": "keyword"
+      }
+    },
+    {
+      "tool": "ticket_comment",
+      "write": false,
+      "args": {
+        "visibility": "requester"
+      }
+    }
+  ],
+  "plan_alternatives": [],
+  "evidence": "Client version is below the supported baseline and no regional outage is active.",
+  "approval": {
+    "required": false,
+    "reason": null,
+    "by": null,
+    "at": null
+  },
+  "metrics": {
+    "ai_seconds": 63,
+    "human_wait_seconds": null,
+    "tokens": 7677
+  },
+  "run_id": "20260929-1020-INC0011",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T10:21:00+09:00",
+      "actor": "ai",
+      "note": "routed to service-desk (0.86)"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-09-29T10:22:00+09:00",
+      "actor": "ai",
+      "note": "RB-002-vpn-connection.md matched; 2 read-only steps; confidence 0.91"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-09-29T10:23:00+09:00",
+      "actor": "ai",
+      "note": "auto-executed above threshold; no human decision required"
+    },
+    {
+      "stage": "close",
+      "at": "2026-09-29T10:24:00+09:00",
+      "actor": "ai",
+      "note": "resolved"
+    }
+  ],
+  "resolved_at": "2026-09-29T10:24:00+09:00"
+}

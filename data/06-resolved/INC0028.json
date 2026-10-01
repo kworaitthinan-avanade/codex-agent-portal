@@ -1,0 +1,83 @@
+{
+  "number": "INC0028",
+  "created_at": "2026-09-29T13:27:00+09:00",
+  "caller": "s.ito",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Laptop is extremely slow since the update",
+  "description": "Everything is sluggish after last week's update.",
+  "state": "resolved",
+  "agent": "service-desk",
+  "confidence": {
+    "grouping": 0.85,
+    "action": 0.9
+  },
+  "alternatives": [
+    {
+      "agent": "request-access",
+      "score": 0.09
+    },
+    {
+      "agent": "ops-automation",
+      "score": 0.06
+    }
+  ],
+  "runbook": "RB-003-software-install.md",
+  "plan": [
+    {
+      "tool": "kb_search",
+      "write": false,
+      "args": {
+        "q": "keyword"
+      }
+    },
+    {
+      "tool": "ticket_comment",
+      "write": false,
+      "args": {
+        "visibility": "requester"
+      }
+    }
+  ],
+  "plan_alternatives": [],
+  "evidence": "The requested title appears on the approved catalogue.",
+  "approval": {
+    "required": false,
+    "reason": null,
+    "by": null,
+    "at": null
+  },
+  "metrics": {
+    "ai_seconds": 63,
+    "human_wait_seconds": null,
+    "tokens": 10033
+  },
+  "run_id": "20260929-1327-INC0028",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T13:28:00+09:00",
+      "actor": "ai",
+      "note": "routed to service-desk (0.85)"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-09-29T13:29:00+09:00",
+      "actor": "ai",
+      "note": "RB-003-software-install.md matched; 2 read-only steps; confidence 0.90"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-09-29T13:30:00+09:00",
+      "actor": "ai",
+      "note": "auto-executed above threshold; no human decision required"
+    },
+    {
+      "stage": "close",
+      "at": "2026-09-29T13:31:00+09:00",
+      "actor": "ai",
+      "note": "resolved"
+    }
+  ],
+  "resolved_at": "2026-09-29T13:31:00+09:00"
+}

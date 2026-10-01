@@ -1,0 +1,12 @@
+{
+  "number": "INC0032",
+  "created_at": "2026-09-29T14:10:00+09:00",
+  "caller": "m.nakagawa",
+  "channel": "portal",
+  "language": "ja",
+  "short_description": "月次コストレポートの依頼",
+  "description": "9月分のクラウド費用レポートをお願いします。",
+  "state": "new",
+  "agent": null,
+  "history": []
+}

@@ -1,0 +1,90 @@
+{
+  "number": "INC0017",
+  "created_at": "2026-09-29T11:26:00+09:00",
+  "caller": "r.harada",
+  "channel": "portal",
+  "language": "ja",
+  "short_description": "パスワードの有効期限が切れました",
+  "description": "ログイン時に期限切れと表示され、変更できません。",
+  "state": "resolved",
+  "agent": "service-desk",
+  "confidence": {
+    "grouping": 0.93,
+    "action": 0.96
+  },
+  "alternatives": [
+    {
+      "agent": "request-access",
+      "score": 0.04
+    },
+    {
+      "agent": "ops-automation",
+      "score": 0.03
+    }
+  ],
+  "runbook": "RB-001-password-reset.md",
+  "plan": [
+    {
+      "tool": "kb_search",
+      "write": false,
+      "args": {
+        "q": "keyword"
+      }
+    },
+    {
+      "tool": "entra_get_user",
+      "write": false,
+      "args": {
+        "upn": "user@example.com"
+      }
+    },
+    {
+      "tool": "ticket_comment",
+      "write": false,
+      "args": {
+        "visibility": "requester"
+      }
+    }
+  ],
+  "plan_alternatives": [],
+  "evidence": "Account shows a lockout event within the last hour; self-service reset is available.",
+  "approval": {
+    "required": false,
+    "reason": null,
+    "by": null,
+    "at": null
+  },
+  "metrics": {
+    "ai_seconds": 65,
+    "human_wait_seconds": null,
+    "tokens": 7449
+  },
+  "run_id": "20260929-1126-INC0017",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T11:27:00+09:00",
+      "actor": "ai",
+      "note": "routed to service-desk (0.93)"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-09-29T11:28:00+09:00",
+      "actor": "ai",
+      "note": "RB-001-password-reset.md matched; 3 read-only steps; confidence 0.96"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-09-29T11:29:00+09:00",
+      "actor": "ai",
+      "note": "auto-executed above threshold; no human decision required"
+    },
+    {
+      "stage": "close",
+      "at": "2026-09-29T11:30:00+09:00",
+      "actor": "ai",
+      "note": "resolved"
+    }
+  ],
+  "resolved_at": "2026-09-29T11:30:00+09:00"
+}

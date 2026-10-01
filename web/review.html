@@ -11,6 +11,8 @@
   <h1>Review Queue</h1>
   <p class="sub" id="sub"></p>
 
+  <div id="busy" class="empty" style="display:none">Working on it &mdash; don't click another action or reload until this clears.</div>
+
   <h2 id="h-group">Confirm group</h2>
   <div id="grouping"></div>
 
@@ -120,12 +122,29 @@ function unlock(num) {
   }
 }
 
+let busy = false;
+
+// Prevents the pile-up that makes bridge.ps1 write to a connection the
+// browser has already abandoned (a slow codex exec still queued behind it).
+// load() always re-renders the buttons afterwards, so there's nothing to restore here.
+function setBusy(on) {
+  busy = on;
+  document.getElementById('busy').style.display = on ? '' : 'none';
+  if (on) document.querySelectorAll('#grouping button, #action button').forEach(b => b.disabled = true);
+}
+
 async function confirmGroup(num, agent) {
+  if (busy) return;
+  setBusy(true);
   const r = await runInCodex(num, agent === 'escalate' ? 'escalate' : 'group', agent);
+  setBusy(false);
   if (r) load();
 }
 async function decide(num, action, extra) {
+  if (busy) return;
+  setBusy(true);
   const r = await runInCodex(num, action, extra);
+  setBusy(false);
   if (r) load();
 }
 

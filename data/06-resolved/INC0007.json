@@ -1,0 +1,92 @@
+{
+  "number": "INC0007",
+  "created_at": "2026-09-29T09:36:00+09:00",
+  "caller": "d.kim",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Add me to the platform-readers group",
+  "description": "I need read access to the shared platform dashboards.",
+  "state": "resolved",
+  "agent": "request-access",
+  "confidence": {
+    "grouping": 0.92,
+    "action": 0.95
+  },
+  "alternatives": [
+    {
+      "agent": "service-desk",
+      "score": 0.05
+    },
+    {
+      "agent": "ops-automation",
+      "score": 0.03
+    }
+  ],
+  "runbook": "RB-015-group-membership.md",
+  "plan": [
+    {
+      "tool": "entra_get_user",
+      "write": false,
+      "args": {
+        "upn": "user@example.com"
+      }
+    },
+    {
+      "tool": "entra_add_group_member",
+      "write": true,
+      "args": {
+        "group": "platform-readers"
+      },
+      "rollback": "remove the user from the group"
+    }
+  ],
+  "plan_alternatives": [
+    "Grant time-limited membership for 7 days"
+  ],
+  "evidence": "Manager approval is present in the ticket and the group is non-privileged.",
+  "approval": {
+    "required": true,
+    "reason": "write-tool",
+    "by": "k.woraitthinan",
+    "at": "2026-09-29T09:39:00+09:00"
+  },
+  "metrics": {
+    "ai_seconds": 60,
+    "human_wait_seconds": 496,
+    "tokens": 5958
+  },
+  "run_id": "20260929-0936-INC0007",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T09:37:00+09:00",
+      "actor": "ai",
+      "note": "routed to request-access (0.92)"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-09-29T09:38:00+09:00",
+      "actor": "ai",
+      "note": "RB-015-group-membership.md matched; 2 steps, 1 write - approval required"
+    },
+    {
+      "stage": "approval",
+      "at": "2026-09-29T09:39:00+09:00",
+      "actor": "human",
+      "note": "approved recommended plan"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-09-29T09:40:00+09:00",
+      "actor": "ai",
+      "note": "executed approved plan"
+    },
+    {
+      "stage": "close",
+      "at": "2026-09-29T09:41:00+09:00",
+      "actor": "ai",
+      "note": "resolved"
+    }
+  ],
+  "resolved_at": "2026-09-29T09:41:00+09:00"
+}

@@ -1,0 +1,72 @@
+{
+  "number": "INC0014",
+  "created_at": "2026-09-29T10:53:00+09:00",
+  "caller": "m.nakagawa",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Unexpected charge on a shared subscription",
+  "description": "There is a new line item we do not recognise on the invoice.",
+  "state": "escalated",
+  "agent": "service-management",
+  "confidence": {
+    "grouping": 0.68,
+    "action": null
+  },
+  "alternatives": [
+    {
+      "agent": "ops-automation",
+      "score": 0.2
+    },
+    {
+      "agent": "service-desk",
+      "score": 0.08
+    },
+    {
+      "agent": "request-access",
+      "score": 0.03
+    },
+    {
+      "agent": "service-management",
+      "score": 0.02
+    }
+  ],
+  "runbook": null,
+  "plan": [],
+  "plan_alternatives": [],
+  "evidence": null,
+  "approval": {
+    "required": false,
+    "reason": null,
+    "by": "human",
+    "at": "2026-10-01T00:00:00+09:00"
+  },
+  "decision": {
+    "reason": "no-runbook"
+  },
+  "metrics": {
+    "ai_seconds": 42,
+    "human_wait_seconds": null,
+    "tokens": 9366
+  },
+  "run_id": "20261001-0000-INC0014",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T10:54:00+09:00",
+      "actor": "ai",
+      "note": "ambiguous: finops 0.68 vs ops-automation 0.20 - below threshold"
+    },
+    {
+      "stage": "grouping-confirmation",
+      "at": "2026-10-01T00:00:00+09:00",
+      "actor": "human",
+      "note": "Confirmed group: service-management"
+    },
+    {
+      "stage": "agent-service-management",
+      "at": "2026-10-01T00:00:00+09:00",
+      "actor": "ai",
+      "note": "Escalated: no matching service-management runbook"
+    }
+  ]
+}

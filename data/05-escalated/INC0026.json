@@ -1,0 +1,59 @@
+{
+  "number": "INC0026",
+  "created_at": "2026-09-29T13:05:00+09:00",
+  "caller": "ops-alerts",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Backup job failed three nights running",
+  "description": "The nightly backup has failed for three consecutive nights.",
+  "state": "escalated",
+  "agent": "ops-automation",
+  "confidence": {
+    "grouping": 0.92,
+    "action": null
+  },
+  "alternatives": [
+    {
+      "agent": "service-desk",
+      "score": 0.05
+    },
+    {
+      "agent": "request-access",
+      "score": 0.03
+    }
+  ],
+  "runbook": null,
+  "plan": [],
+  "plan_alternatives": [],
+  "evidence": null,
+  "approval": {
+    "required": false,
+    "reason": null,
+    "by": null,
+    "at": null
+  },
+  "metrics": {
+    "ai_seconds": 68,
+    "human_wait_seconds": null,
+    "tokens": 5739
+  },
+  "run_id": "20260929-1305-INC0026",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T13:06:00+09:00",
+      "actor": "ai",
+      "note": "routed to ops-automation (0.92)"
+    },
+    {
+      "stage": "retrieval",
+      "at": "2026-09-29T13:07:00+09:00",
+      "actor": "ai",
+      "note": "no runbook scored above 0.50 - escalated"
+    }
+  ],
+  "escalation": {
+    "reason": "no-runbook",
+    "at": "2026-09-29T13:07:00+09:00"
+  }
+}

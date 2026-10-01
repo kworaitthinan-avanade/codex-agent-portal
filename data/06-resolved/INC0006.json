@@ -1,0 +1,83 @@
+{
+  "number": "INC0006",
+  "created_at": "2026-09-29T09:25:00+09:00",
+  "caller": "t.onoue",
+  "channel": "portal",
+  "language": "ja",
+  "short_description": "承認済みソフトウェアのインストール依頼",
+  "description": "業務で使用するため、承認済みカタログのツールをインストールしたいです。",
+  "state": "resolved",
+  "agent": "service-desk",
+  "confidence": {
+    "grouping": 0.88,
+    "action": 0.92
+  },
+  "alternatives": [
+    {
+      "agent": "request-access",
+      "score": 0.07
+    },
+    {
+      "agent": "ops-automation",
+      "score": 0.05
+    }
+  ],
+  "runbook": "RB-003-software-install.md",
+  "plan": [
+    {
+      "tool": "kb_search",
+      "write": false,
+      "args": {
+        "q": "keyword"
+      }
+    },
+    {
+      "tool": "ticket_comment",
+      "write": false,
+      "args": {
+        "visibility": "requester"
+      }
+    }
+  ],
+  "plan_alternatives": [],
+  "evidence": "The requested title appears on the approved catalogue.",
+  "approval": {
+    "required": false,
+    "reason": null,
+    "by": null,
+    "at": null
+  },
+  "metrics": {
+    "ai_seconds": 31,
+    "human_wait_seconds": null,
+    "tokens": 11652
+  },
+  "run_id": "20260929-0925-INC0006",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T09:26:00+09:00",
+      "actor": "ai",
+      "note": "routed to service-desk (0.88)"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-09-29T09:27:00+09:00",
+      "actor": "ai",
+      "note": "RB-003-software-install.md matched; 2 read-only steps; confidence 0.92"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-09-29T09:28:00+09:00",
+      "actor": "ai",
+      "note": "auto-executed above threshold; no human decision required"
+    },
+    {
+      "stage": "close",
+      "at": "2026-09-29T09:29:00+09:00",
+      "actor": "ai",
+      "note": "resolved"
+    }
+  ],
+  "resolved_at": "2026-09-29T09:29:00+09:00"
+}

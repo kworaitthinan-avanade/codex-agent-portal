@@ -1,0 +1,69 @@
+﻿{
+    "number":  "INC0031",
+    "created_at":  "2026-09-29T14:10:00+09:00",
+    "caller":  "hr-ops",
+    "channel":  "portal",
+    "language":  "en",
+    "short_description":  "New starter account setup for October",
+    "description":  "Please prepare accounts for two new joiners starting 1 October.",
+    "state":  "escalated",
+    "agent":  "request-access",
+    "history":  [
+                    {
+                        "stage":  "grouping",
+                        "at":  "2026-10-01T09:30:00+09:00",
+                        "actor":  "ai",
+                        "note":  "routed to request-access (0.90); matched new starter account setup"
+                    },
+                    {
+                        "stage":  "plan",
+                        "at":  "2026-10-01T09:31:00+09:00",
+                        "actor":  "ai",
+                        "note":  "escalated: no matching runbook for general account provisioning"
+                    }
+                ],
+    "confidence":  {
+                       "grouping":  0.9,
+                       "action":  null
+                   },
+    "alternatives":  [
+                         {
+                             "agent":  "service-desk",
+                             "score":  0.05
+                         },
+                         {
+                             "agent":  "service-management",
+                             "score":  0.02
+                         },
+                         {
+                             "agent":  "ops-automation",
+                             "score":  0.02
+                         },
+                         {
+                             "agent":  "finops",
+                             "score":  0.01
+                         }
+                     ],
+    "match_reason":  [
+                         "account setup",
+                         "new starter",
+                         "prepare accounts"
+                     ],
+    "runbook":  null,
+    "plan":  [
+
+             ],
+    "evidence":  "General new starter account provisioning is not covered by the available runbooks.",
+    "approval":  {
+                     "required":  false,
+                     "reason":  "no-runbook",
+                     "by":  null,
+                     "at":  null
+                 },
+    "metrics":  {
+                    "ai_seconds":  60,
+                    "human_wait_seconds":  null,
+                    "tokens":  2100
+                },
+    "run_id":  "20261001-0930-INC0031"
+}

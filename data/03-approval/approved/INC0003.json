@@ -1,0 +1,88 @@
+﻿{
+    "number":  "INC0003",
+    "created_at":  "2026-09-29T08:52:00+09:00",
+    "caller":  "k.woraitthinan",
+    "channel":  "portal",
+    "language":  "en",
+    "short_description":  "Cannot access S3 bucket wora-test-s3",
+    "description":  "Access denied when listing objects in the dev bucket from my assumed role.",
+    "state":  "approved",
+    "agent":  "request-access",
+    "confidence":  {
+                       "grouping":  0.91,
+                       "action":  0.72
+                   },
+    "alternatives":  [
+                         {
+                             "agent":  "service-desk",
+                             "score":  0.05
+                         },
+                         {
+                             "agent":  "ops-automation",
+                             "score":  0.04
+                         }
+                     ],
+    "runbook":  "RB-014-s3-access.md",
+    "plan":  [
+                 {
+                     "tool":  "aws_s3_get_bucket_policy",
+                     "write":  false,
+                     "args":  {
+                                  "bucket":  "wora-test-s3"
+                              }
+                 },
+                 {
+                     "tool":  "aws_iam_list_attached",
+                     "write":  false,
+                     "args":  {
+                                  "role":  "honda-dev-readonly"
+                              }
+                 },
+                 {
+                     "tool":  "aws_iam_attach_policy",
+                     "write":  true,
+                     "args":  {
+                                  "role":  "honda-dev-readonly",
+                                  "policy":  "S3ListDev"
+                              },
+                     "rollback":  "detach policy S3ListDev from the role"
+                 }
+             ],
+    "plan_alternatives":  [
+                              "Grant read-only list access to the single prefix instead",
+                              "Run the diagnostic steps only and report back"
+                          ],
+    "evidence":  "Bucket policy lacks s3:ListBucket for the caller\u0027s role.",
+    "approval":  {
+                     "required":  true,
+                     "reason":  "write-tool",
+                     "by":  "human",
+                     "at":  "2026-10-01T14:46:03.0000000+09:00"
+                 },
+    "metrics":  {
+                    "ai_seconds":  31,
+                    "human_wait_seconds":  193863,
+                    "tokens":  4793
+                },
+    "run_id":  "20260929-0852-INC0003",
+    "history":  [
+                    {
+                        "stage":  "grouping",
+                        "at":  "2026-09-29T08:53:00+09:00",
+                        "actor":  "ai",
+                        "note":  "routed to request-access (0.91)"
+                    },
+                    {
+                        "stage":  "plan",
+                        "at":  "2026-09-29T08:54:00+09:00",
+                        "actor":  "ai",
+                        "note":  "RB-014-s3-access.md matched; held at gate 2 (write-tool)"
+                    },
+                    {
+                        "stage":  "approval",
+                        "at":  "2026-10-01T14:46:03.0000000+09:00",
+                        "actor":  "human",
+                        "note":  "Approved recommended plan."
+                    }
+                ]
+}

@@ -1,0 +1,83 @@
+{
+  "number": "INC0008",
+  "created_at": "2026-09-29T09:47:00+09:00",
+  "caller": "e.shimada",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Monthly operations report for September",
+  "description": "Please prepare the monthly KPI summary for the September period.",
+  "state": "resolved",
+  "agent": "service-management",
+  "confidence": {
+    "grouping": 0.9,
+    "action": 0.94
+  },
+  "alternatives": [
+    {
+      "agent": "service-desk",
+      "score": 0.06
+    },
+    {
+      "agent": "request-access",
+      "score": 0.04
+    }
+  ],
+  "runbook": "RB-041-monthly-report.md",
+  "plan": [
+    {
+      "tool": "ticket_stats",
+      "write": false,
+      "args": {
+        "period": "2026-09"
+      }
+    },
+    {
+      "tool": "report_generate",
+      "write": false,
+      "args": {
+        "template": "monthly-ops"
+      }
+    }
+  ],
+  "plan_alternatives": [],
+  "evidence": "All figures reproduce from the ticket store for the period.",
+  "approval": {
+    "required": false,
+    "reason": null,
+    "by": null,
+    "at": null
+  },
+  "metrics": {
+    "ai_seconds": 33,
+    "human_wait_seconds": null,
+    "tokens": 7752
+  },
+  "run_id": "20260929-0947-INC0008",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T09:48:00+09:00",
+      "actor": "ai",
+      "note": "routed to service-management (0.90)"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-09-29T09:49:00+09:00",
+      "actor": "ai",
+      "note": "RB-041-monthly-report.md matched; 2 read-only steps; confidence 0.94"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-09-29T09:50:00+09:00",
+      "actor": "ai",
+      "note": "auto-executed above threshold; no human decision required"
+    },
+    {
+      "stage": "close",
+      "at": "2026-09-29T09:51:00+09:00",
+      "actor": "ai",
+      "note": "resolved"
+    }
+  ],
+  "resolved_at": "2026-09-29T09:51:00+09:00"
+}

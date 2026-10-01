@@ -1,0 +1,69 @@
+{
+  "number": "INC0029",
+  "created_at": "2026-09-29T13:38:00+09:00",
+  "caller": "unknown.user",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Access request without a stated target",
+  "description": "I need access please.",
+  "state": "awaiting-info",
+  "agent": "request-access",
+  "confidence": {
+    "grouping": 0.88,
+    "action": 0.61
+  },
+  "alternatives": [
+    {
+      "agent": "service-desk",
+      "score": 0.07
+    },
+    {
+      "agent": "ops-automation",
+      "score": 0.05
+    }
+  ],
+  "runbook": "RB-014-s3-access.md",
+  "plan": [
+    {
+      "tool": "aws_s3_get_bucket_policy",
+      "write": false,
+      "args": {
+        "bucket": "wora-test-s3"
+      }
+    }
+  ],
+  "plan_alternatives": [],
+  "evidence": "Bucket policy lacks s3:ListBucket for the caller's role.",
+  "approval": {
+    "required": true,
+    "reason": "low-confidence",
+    "by": "k.woraitthinan",
+    "at": "2026-09-29T13:41:00+09:00"
+  },
+  "metrics": {
+    "ai_seconds": 32,
+    "human_wait_seconds": 960,
+    "tokens": 8823
+  },
+  "run_id": "20260929-1338-INC0029",
+  "history": [
+    {
+      "stage": "grouping",
+      "at": "2026-09-29T13:39:00+09:00",
+      "actor": "ai",
+      "note": "routed to request-access (0.88)"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-09-29T13:40:00+09:00",
+      "actor": "ai",
+      "note": "RB-014-s3-access.md matched but the ticket does not name a target resource"
+    },
+    {
+      "stage": "advisory",
+      "at": "2026-09-29T13:41:00+09:00",
+      "actor": "human",
+      "note": "advisory: asked requester to name the bucket and role ARN; no tool executed"
+    }
+  ]
+}
