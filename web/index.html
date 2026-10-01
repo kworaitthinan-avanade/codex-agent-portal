@@ -66,6 +66,7 @@ async function load() {
   const c = b.counts;
   document.getElementById('counters').innerHTML = [
     ['', c.unprocessed,    'Unprocessed'],
+    ['', c.grouped || 0,   'Grouped'],
     ['needs', c.needs_you, 'Needs you'],
     ['info', c.awaiting_info, 'Awaiting info'],
     ['esc',  c.escalated,  'Escalated'],

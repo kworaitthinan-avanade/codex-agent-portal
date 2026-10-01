@@ -51,7 +51,7 @@ h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.7px;
      color: var(--muted); margin: 26px 0 10px; }
 
 /* ---------- counters ---------- */
-.counters { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.counters { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
 .counter {
   background: var(--panel); border: 1px solid var(--line);
   border-top: 3px solid var(--idle);
