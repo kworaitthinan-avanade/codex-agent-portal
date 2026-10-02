@@ -65,22 +65,23 @@ async function load() {
 
   const c = b.counts;
   document.getElementById('counters').innerHTML = [
-    ['', c.unprocessed,    'Unprocessed'],
+    ['', c.unprocessed || 0,    'Unprocessed'],
     ['', c.grouped || 0,   'Grouped'],
-    ['needs', c.needs_you, 'Needs you'],
-    ['info', c.awaiting_info, 'Awaiting info'],
-    ['esc',  c.escalated,  'Escalated'],
-    ['done', c.resolved_today, 'Resolved today']
+    ['needs', c.needs_you || 0, 'Needs you'],
+    ['info', c.awaiting_info || 0, 'Awaiting info'],
+    ['esc',  c.escalated || 0,  'Escalated'],
+    ['done', c.resolved_today || 0, 'Resolved today']
   ].map(([cls, n, l]) =>
     '<div class="counter ' + cls + '"><div class="n">' + n + '</div>' +
     '<div class="l">' + l + '</div></div>').join('');
 
   const a = b.auto_handled;
+  const thr = b.thresholds || { grouping: '?', action: '?' };
   document.getElementById('rate').innerHTML =
     'Auto-handled today: <b>' + a.count + ' of ' + a.total + '</b> (' +
     Math.round(a.rate * 100) + '%) &mdash; resolved with no human decision. ' +
     '<span style="color:var(--muted)">Thresholds: grouping ' +
-    b.thresholds.grouping + ', action ' + b.thresholds.action + '.</span>';
+    thr.grouping + ', action ' + thr.action + '.</span>';
 
   document.getElementById('board').innerHTML = COLS.map(col => {
     const items = b.tickets.filter(t => colOf(t) === col.key);
