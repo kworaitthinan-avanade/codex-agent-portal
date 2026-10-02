@@ -1,90 +1,107 @@
-{
-  "number": "INC0001",
-  "created_at": "2026-09-29T08:30:00+09:00",
-  "caller": "m.tanaka",
-  "channel": "portal",
-  "language": "en",
-  "short_description": "Password reset needed after lockout",
-  "description": "I entered the wrong password too many times and my account is now locked.",
-  "state": "resolved",
-  "agent": "service-desk",
-  "confidence": {
-    "grouping": 0.94,
-    "action": 0.96
-  },
-  "alternatives": [
-    {
-      "agent": "request-access",
-      "score": 0.04
-    },
-    {
-      "agent": "ops-automation",
-      "score": 0.02
-    }
-  ],
-  "runbook": "RB-001-password-reset.md",
-  "plan": [
-    {
-      "tool": "kb_search",
-      "write": false,
-      "args": {
-        "q": "keyword"
-      }
-    },
-    {
-      "tool": "entra_get_user",
-      "write": false,
-      "args": {
-        "upn": "user@example.com"
-      }
-    },
-    {
-      "tool": "ticket_comment",
-      "write": false,
-      "args": {
-        "visibility": "requester"
-      }
-    }
-  ],
-  "plan_alternatives": [],
-  "evidence": "Account shows a lockout event within the last hour; self-service reset is available.",
-  "approval": {
-    "required": false,
-    "reason": null,
-    "by": null,
-    "at": null
-  },
-  "metrics": {
-    "ai_seconds": 48,
-    "human_wait_seconds": null,
-    "tokens": 5435
-  },
-  "run_id": "20260929-0830-INC0001",
-  "history": [
-    {
-      "stage": "grouping",
-      "at": "2026-09-29T08:31:00+09:00",
-      "actor": "ai",
-      "note": "routed to service-desk (0.94)"
-    },
-    {
-      "stage": "plan",
-      "at": "2026-09-29T08:32:00+09:00",
-      "actor": "ai",
-      "note": "RB-001-password-reset.md matched; 3 read-only steps; confidence 0.96"
-    },
-    {
-      "stage": "execute",
-      "at": "2026-09-29T08:33:00+09:00",
-      "actor": "ai",
-      "note": "auto-executed above threshold; no human decision required"
-    },
-    {
-      "stage": "close",
-      "at": "2026-09-29T08:34:00+09:00",
-      "actor": "ai",
-      "note": "resolved"
-    }
-  ],
-  "resolved_at": "2026-09-29T08:34:00+09:00"
+﻿{
+    "number":  "INC0001",
+    "created_at":  "2026-09-29T08:30:00+09:00",
+    "caller":  "m.tanaka",
+    "channel":  "portal",
+    "language":  "en",
+    "short_description":  "Password reset needed after lockout",
+    "description":  "I entered the wrong password too many times and my account is now locked.",
+    "state":  "resolved",
+    "agent":  "service-desk",
+    "confidence":  {
+                       "grouping":  0.94,
+                       "action":  0.96
+                   },
+    "alternatives":  [
+                         {
+                             "agent":  "request-access",
+                             "score":  0.04
+                         },
+                         {
+                             "agent":  "ops-automation",
+                             "score":  0.02
+                         },
+                         {
+                             "agent":  "service-management",
+                             "score":  0
+                         },
+                         {
+                             "agent":  "finops",
+                             "score":  0
+                         }
+                     ],
+    "match_reason":  [
+                         "password",
+                         "account locked",
+                         "reset"
+                     ],
+    "runbook":  "RB-001-password-reset.md",
+    "plan":  [
+                 {
+                     "tool":  "kb_search",
+                     "write":  false,
+                     "args":  {
+                                  "q":  "m.tanaka password lockout identity verification"
+                              }
+                 },
+                 {
+                     "tool":  "entra_get_user",
+                     "write":  false,
+                     "args":  {
+                                  "caller":  "m.tanaka",
+                                  "purpose":  "check account lockout status"
+                              }
+                 },
+                 {
+                     "tool":  "ticket_comment",
+                     "write":  false,
+                     "args":  {
+                                  "visibility":  "requester",
+                                  "message":  "Please use the self-service password reset option. The runbook recommends this and does not authorize an agent-initiated password reset."
+                              }
+                 }
+             ],
+    "plan_alternatives":  [
+
+                          ],
+    "evidence":  "The ticket reports a lockout caused by repeated incorrect passwords; RB-001 directs identity verification, checking directory lockout status, then providing self-service reset guidance.",
+    "approval":  {
+                     "required":  false,
+                     "reason":  null,
+                     "by":  null,
+                     "at":  null
+                 },
+    "metrics":  {
+                    "ai_seconds":  48,
+                    "human_wait_seconds":  null,
+                    "tokens":  5435
+                },
+    "run_id":  "20261002-1202-INC0001",
+    "history":  [
+                    {
+                        "stage":  "grouping",
+                        "at":  "2026-10-02T12:02:00+09:00",
+                        "actor":  "ai",
+                        "note":  "routed to service-desk (0.94) based on password and lockout signals"
+                    },
+                    {
+                        "stage":  "plan",
+                        "at":  "2026-10-02T12:02:20+09:00",
+                        "actor":  "ai",
+                        "note":  "RB-001-password-reset.md matched; 3 read-only steps; action confidence 0.96"
+                    },
+                    {
+                        "stage":  "execute",
+                        "at":  "2026-10-02T12:02:40+09:00",
+                        "actor":  "ai",
+                        "note":  "read-only plan auto-executed under configured thresholds"
+                    },
+                    {
+                        "stage":  "close",
+                        "at":  "2026-10-02T12:03:00+09:00",
+                        "actor":  "ai",
+                        "note":  "resolved; self-service password reset guidance provided"
+                    }
+                ],
+    "resolved_at":  "2026-10-02T12:03:00+09:00"
 }

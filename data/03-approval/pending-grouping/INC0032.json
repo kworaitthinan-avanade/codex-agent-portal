@@ -4,8 +4,8 @@
     "caller":  "m.nakagawa",
     "channel":  "portal",
     "language":  "ja",
-    "short_description":  "譛域ｬ｡繧ｳ繧ｹ繝医Ξ繝昴・繝医・萓晞ｼ",
-    "description":  "9譛亥・縺ｮ繧ｯ繝ｩ繧ｦ繝芽ｲｻ逕ｨ繝ｬ繝昴・繝医ｒ縺企｡倥＞縺励∪縺吶・",
+    "short_description":  "月次コストレポートの依頼",
+    "description":  "9月分のクラウド費用レポートをお願いします。",
     "state":  "pending-grouping",
     "agent":  null,
     "history":  [

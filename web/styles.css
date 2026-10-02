@@ -102,6 +102,31 @@ h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.7px;
 .tag.write { background: #fbeaea; color: var(--write); font-weight: 700; }
 .tag.read  { background: #e9f3e9; color: var(--auto); }
 
+/* ---------- card hover detail ---------- */
+.card-wrap { position: relative; }
+.card-detail {
+  display: none; position: absolute; left: 0; top: calc(100% + 4px);
+  width: 360px; max-height: 420px; overflow-y: auto; z-index: 50;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.14);
+  font-size: 12px;
+}
+.card-wrap:hover .card-detail { display: block; }
+.dd-head { font-weight: 700; margin-bottom: 6px; }
+.dd-desc { color: var(--muted); margin-bottom: 8px; }
+.dd-row { display: flex; justify-content: space-between; gap: 10px;
+          padding: 3px 0; border-bottom: 1px dashed var(--line); }
+.dd-row:last-of-type { border-bottom: 0; }
+.dd-l { color: var(--muted); }
+.dd-v { text-align: right; word-break: break-word; }
+.dd-sect { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;
+           color: var(--muted); margin: 10px 0 4px; }
+.dd-step { padding: 4px 0; border-bottom: 1px dashed var(--line); }
+.dd-step:last-child { border-bottom: 0; }
+.dd-rb { font-size: 11px; color: var(--write); margin-top: 2px; }
+.dd-arg { font-size: 11px; color: var(--muted); margin: 2px 0 0 4px; word-break: break-word; }
+.dd-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+
 /* ---------- review ---------- */
 .item { background: var(--panel); border: 1px solid var(--line);
         border-left: 3px solid var(--pending);

@@ -28,6 +28,13 @@ function hasWrite(t) {
   return (t.plan || []).some(s => s.write);
 }
 
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
+
 /* ---- nav ---- */
 function renderNav(active, count) {
   const el = document.querySelector('header');

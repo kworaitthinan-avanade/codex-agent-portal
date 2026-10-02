@@ -100,11 +100,10 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\web\bridge.ps1
 ```
 
-## Reset a demo
+## Refresh screen
 
 ```powershell
-Remove-Item data\01-inbox\*.json
-Copy-Item samples\tickets\*.json data\01-inbox\
+powershell -ExecutionPolicy Bypass -File .\web\refresh-board.ps1
 ```
 
 `samples/` is immutable and committed. `data/` is working state.

@@ -50,11 +50,70 @@ function card(t, cls) {
   const score = c.action != null ? c.action : c.grouping;
   if (score != null) bits.push('conf ' + score.toFixed(2));
 
-  return '<div class="card ' + cls + '" ' +
+  return '<div class="card-wrap">' +
+    '<div class="card ' + cls + '" ' +
       (cls === 'needs' ? 'onclick="location.href=\'review.html\'"' : '') + '>' +
-    '<div class="num">' + t.number + '</div>' +
-    '<div class="desc">' + t.short_description + '</div>' +
-    '<div class="meta">' + bits.join(' ') + '</div>' +
+      '<div class="num">' + t.number + '</div>' +
+      '<div class="desc">' + t.short_description + '</div>' +
+      '<div class="meta">' + bits.join(' ') + '</div>' +
+    '</div>' +
+    cardDetail(t) +
+  '</div>';
+}
+
+function cardDetail(t) {
+  const c = t.confidence || {};
+
+  const rows = [
+    ['Agent', t.agent],
+    ['State', t.state],
+    ['Caller', t.caller],
+    ['Language', t.language],
+    ['Created', t.created_at ? fmtTime(t.created_at) + ' ' + new Date(t.created_at).toLocaleDateString() : null],
+    ['Runbook', t.runbook],
+    ['Grouping conf', c.grouping != null ? c.grouping.toFixed(2) : null],
+    ['Action conf', c.action != null ? c.action.toFixed(2) : null],
+    ['Approval reason', t.approval_reason],
+    ['AI time', t.metrics && t.metrics.ai_seconds != null ? fmtDuration(t.metrics.ai_seconds) : null],
+    ['Human wait', t.metrics && t.metrics.human_wait_seconds != null ? fmtDuration(t.metrics.human_wait_seconds) : null],
+    ['Tokens', t.metrics && t.metrics.tokens != null ? t.metrics.tokens.toLocaleString() : null],
+    ['Run id', t.run_id]
+  ].filter(([, v]) => v != null && v !== '')
+   .map(([l, v]) => '<div class="dd-row"><span class="dd-l">' + l + '</span><span class="dd-v">' + escHtml(v) + '</span></div>')
+   .join('');
+
+  const altRows = (t.alternatives || []).map(a =>
+    '<div class="dd-row"><span class="dd-l">' + escHtml(a.agent) + '</span>' +
+    '<span class="dd-v">' + a.score.toFixed(2) + '</span></div>').join('');
+
+  const matchReasons = (t.match_reason || []).length
+    ? (t.match_reason || []).map(m => '<span class="tag">' + escHtml(m) + '</span>').join(' ')
+    : '';
+
+  const argRow = args => Object.entries(args || {})
+    .map(([k, v]) => '<div class="dd-arg"><b>' + escHtml(k) + '</b>: ' + escHtml(v) + '</div>').join('');
+
+  const planRows = (t.plan || []).map(s =>
+    '<div class="dd-step"><code>' + escHtml(s.tool) + '</code>' +
+    (s.write ? ' <span class="tag write">WRITE</span>' : ' <span class="tag read">read</span>') +
+    argRow(s.args) +
+    (s.rollback ? '<div class="dd-rb">rollback: ' + escHtml(s.rollback) + '</div>' : '') +
+    '</div>').join('');
+
+  const planAltRows = (t.plan_alternatives || []).length
+    ? '<div class="dd-sect">Plan alternatives</div>' +
+      (t.plan_alternatives || []).map(p => '<div class="dd-step">' + escHtml(p.label || p.summary || JSON.stringify(p)) + '</div>').join('')
+    : '';
+
+  return '<div class="card-detail">' +
+    '<div class="dd-head">' + t.number + ' &mdash; ' + escHtml(t.short_description) + '</div>' +
+    (t.description ? '<div class="dd-desc">' + escHtml(t.description) + '</div>' : '') +
+    (matchReasons ? '<div class="dd-sect">Matched on</div><div class="dd-tags">' + matchReasons + '</div>' : '') +
+    rows +
+    (altRows ? '<div class="dd-sect">Alternatives</div>' + altRows : '') +
+    (t.evidence ? '<div class="dd-sect">Evidence</div><div class="dd-desc">' + escHtml(t.evidence) + '</div>' : '') +
+    (planRows ? '<div class="dd-sect">Plan</div>' + planRows : '') +
+    planAltRows +
   '</div>';
 }
 

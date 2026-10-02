@@ -1,0 +1,12 @@
+{
+  "number": "INC0003",
+  "created_at": "2026-09-29T08:52:00+09:00",
+  "caller": "k.woraitthinan",
+  "channel": "portal",
+  "language": "en",
+  "short_description": "Cannot access S3 bucket wora-test-s3",
+  "description": "Access denied when listing objects in the dev bucket from my assumed role.",
+  "state": "new",
+  "agent": null,
+  "history": []
+}
